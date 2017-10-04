@@ -1,0 +1,169 @@
+public class SavingsAccount {
+
+	private double balance;
+	private double AIR;
+
+
+	public SavingsAccount(double bal) {
+		balance = bal;
+	}
+
+	public void withdrawl(double amt) {
+		balance -= amt;
+	}
+
+	public void deposit(double amt) {
+		balance += amt;
+	}
+	
+	public void interest(double I) {
+		I = balance * (AIR / 12);
+		balance += I;
+	}
+
+	public void setAIR(double rate) {
+		AIR = rate;
+	}
+	
+	public double getBalance() {
+		return balance;
+	}
+	
+	public double getAir() {
+		return AIR;
+	}
+}
+
+
+
+
+
+
+import java.util.Scanner;
+
+public class BalanceOfSavings {
+
+	public static void main(String[] args) {
+		
+		double bal;
+		double amt;
+		double rate;
+		int months;
+
+		Scanner keyboard = new Scanner(System.in);
+
+		System.out.println("Please enter the starting balance of your account");
+		bal = keyboard.nextDouble();
+
+		while (bal < 0) {
+			System.out.println("Invalid, please enter a balance amount of 0 or more.");
+			bal = keyboard.nextDouble();
+		}
+
+		System.out.println("Please enter the interest rate of your account");
+		rate = keyboard.nextDouble();
+
+		while (rate < 0) {
+			System.out.println("Invalid, please enter a interest amount of 0 or more.");
+			rate = keyboard.nextDouble();
+		}
+
+		System.out.println("Please enter the number of months since the account has been established");
+		months = keyboard.nextInt();
+
+		while (months < 0) {
+			System.out.println("Invalid, please enter 0 or more for the months since the account has been established.");
+			months = keyboard.nextInt();
+		}
+
+
+		SavingsAccount newBal = new SavingsAccount(bal);
+
+		for (int counter = 1; counter <= months; counter++ ) {
+
+
+			System.out.println("Please enter the amount deposited into the account during the month");
+			amt = keyboard.nextDouble();
+
+			while (amt < 0) {
+				System.out.println("Invalid, please enter a deposit amount of 0 or more.");
+				amt = keyboard.nextDouble();
+			}
+
+			newBal.deposit(amt);
+
+			System.out.print("Please enter the amount withdrawn from the account during the month");
+			amt = keyboard.nextDouble();
+
+			while (amt < 0) {
+				System.out.println("Invalid, please enter a withdrawn amount of 0 or more.");
+				amt = keyboard.nextDouble();
+			}
+			
+			newBal.withdrawl(amt);
+			
+			newBal.interest(rate);
+			
+		}
+		
+		System.out.println("Your ending balance is " + newBal.getBalance());
+		System.out.println("Your total interest earned is  " + newBal.getAir());
+		/*need to display the total amount of interest earned but I am not passing the interest rate to my interest rate method correctly, i need to also display the total amount of time money was withdrawn 
+		 * and display the total amount of money deposited but im not sure how, i was thinking each time a deposit and withdrawl was made to store it to a seperate variable for each and then keep adding the 
+		 * new amount, somehting like totalwithdrawl += withdraw and totaldeposit += deposits. 
+		*/
+	}
+
+}
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+
+
+
+public class Prog11 {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		 //Prog 11 doesnt specify an interest rate? Do you ask user for it again?
+		
+		
+		File deposits = new File("Deposits.txt");
+		Scanner keyboard = new Scanner(deposits);
+		
+		
+		double bal = 500;
+		double rate = .10;
+		double amt;
+		
+		SavingsAccount newBal = new SavingsAccount(bal);
+		
+		
+		while(keyboard.hasNextDouble()) {
+			amt = keyboard.nextDouble();
+			newBal.deposit(amt);
+		}
+		
+		
+		keyboard.close();
+		File withdrawls = new File("Withdrawals.txt");
+		Scanner keyboard1 = new Scanner(withdrawls);
+		
+		while (keyboard1.hasNextDouble()) {
+			amt = keyboard1.nextDouble();
+			newBal.withdrawl(amt);
+		}
+		
+		keyboard1.close();
+		
+		newBal.interest(rate);
+		
+		System.out.println("Your ending balance is " + newBal.getBalance());
+		System.out.println("Your total interest earned is " + newBal.getAir());
+		
+	}
+
+}
+
